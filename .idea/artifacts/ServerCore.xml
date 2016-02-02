@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ServerCore">
+    <output-path>$PROJECT_DIR$/out/artifacts/ServerCore</output-path>
+    <root id="archive" name="ServerCore.jar">
+      <element id="module-output" name="ServerCore" />
+    </root>
+  </artifact>
+</component>

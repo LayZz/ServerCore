@@ -1,0 +1,7 @@
+name: ServerCore
+version: 0.1_beta
+main: de.flashbeatzz.servercore.ServerCore
+
+author: [flashbeatz, ohne_name0815]
+
+commands:
