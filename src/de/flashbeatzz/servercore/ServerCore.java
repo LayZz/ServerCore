@@ -1,11 +1,9 @@
 package de.flashbeatzz.servercore;
 
-import com.google.common.collect.Lists;
-import de.flashbeatzz.servercore.permissions.Permission;
-import de.flashbeatzz.servercore.permissions.PermissionGroup;
 import de.flashbeatzz.servercore.utils.Config;
 import de.flashbeatzz.servercore.utils.Data;
 import de.flashbeatzz.servercore.utils.MySQL;
+import de.flashbeatzz.servercore.utils.SocketTarget;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +19,7 @@ public class ServerCore extends JavaPlugin {
         Data.console.info("ServerCore is disabling ...");
 
         Data.mySQL.closeConnection();
+        sendMessage(SocketTarget.BUNGEECORD, "SYSTEM", "DISCONNECT " + Bukkit.getServer().getServerName());
 
         Data.console.info("ServerCore successfully disabled.");
     }
@@ -43,7 +42,7 @@ public class ServerCore extends JavaPlugin {
         Data.mysqlCfg.addDefault("MySQL.Port", 3306);
         Data.mysqlCfg.copyAndSave(true);
 
-        Data.permConf = new Config("MySQL", getDescription().getName());
+        /*Data.permConf = new Config("groups", getDescription().get());
 
         Data.permConf.addDefault("Groups.Default.build", false);
         Data.permConf.addDefault("Groups.Default.op", false);
@@ -60,7 +59,7 @@ public class ServerCore extends JavaPlugin {
         Data.permConf.addDefault("Groups.Admin.nameFormat", "§4Admin");
         Data.permConf.addDefault("Groups.Admin.chatFormat", "§c");
         Data.permConf.addDefault("Groups.Admin.subGroups", Lists.newArrayList());
-        Data.permConf.copyAndSave(true);
+        Data.permConf.copyAndSave(true);*/
 
         Data.mySQL = new MySQL();
         if(!Data.mySQL.openConnection()) {
@@ -68,22 +67,37 @@ public class ServerCore extends JavaPlugin {
         }
         Data.cfg = new Config("Config", getDescription().getName());
 
-        PermissionGroup.loadPermissionGroups();
-        Permission.loadPermissions();
+        /*PermissionGroup.loadPermissionGroups();
+        Permission.loadPermissions();*/
+
+        createSocket();
+        sendMessage(SocketTarget.BUNGEECORD, "SYSTEM", "CONNECT " + Bukkit.getServer().getServerName());
 
         Data.console.info("ServerCore successfully enabled.");
     }
 
     public static void sendMessage(String target, String header, String message) {
-        PrintWriter printWriter = null;
+        PrintWriter printWriter;
         try {
             printWriter = new PrintWriter(socket.getOutputStream());
             printWriter.print(target + "\n" + header + "\n" + message);
             printWriter.flush();
             printWriter.close();
         } catch (IOException e) {
-        e.printStackTrace();
+            e.printStackTrace();
+        }
     }
+
+    public static void sendMessage(SocketTarget target, String header, String message) {
+        PrintWriter printWriter = null;
+        try {
+            printWriter = new PrintWriter(socket.getOutputStream());
+            printWriter.print(target.get() + "\n" + header + "\n" + message);
+            printWriter.flush();
+            printWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     static Socket socket;
