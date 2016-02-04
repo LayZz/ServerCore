@@ -3,7 +3,7 @@ package de.flashbeatzz.servercore.utils;
 public enum SocketTarget {
 
     BUNGEECORD("BUNGEECORD"),
-    SPIGOT_BUKKIT("SPIGOT"),
+    SPIGOT("SPIGOT"),
     ALL("ALL");
 
     String name;
@@ -13,7 +13,7 @@ public enum SocketTarget {
     }
 
     public String get() {
-        return get();
+        return name;
     }
 
 }

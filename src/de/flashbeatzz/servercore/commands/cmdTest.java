@@ -1,6 +1,6 @@
 package de.flashbeatzz.servercore.commands;
 
-public class cmdKick {
+public class cmdTest {
 
 
 }

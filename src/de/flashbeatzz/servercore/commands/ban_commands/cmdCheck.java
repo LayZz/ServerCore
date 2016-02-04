@@ -1,4 +1,4 @@
-package de.flashbeatzz.servercore.commands;
+package de.flashbeatzz.servercore.commands.ban_commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
