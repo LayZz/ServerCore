@@ -54,4 +54,8 @@ public class UUIDLibrary {
         return false;
     }
 
+    public static UUID getConsoleUUID() {
+        return new UUID(0L, 0L);
+    }
+
 }

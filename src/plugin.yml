@@ -5,3 +5,21 @@ main: de.flashbeatzz.servercore.ServerCore
 author: [flashbeatz, ohne_name0815]
 
 commands:
+  ban:
+    description: Ban-Command
+    usage: /ban <Spieler> [Grund]
+  check:
+    description: Check-Command
+    usage: /check <Spieler>
+  kick:
+    description: Kick-Command
+    usage: /kick <Spieler> [Grund]
+  tempban:
+    description: Temoban-Command
+    usage: /ban <Spieler> <Zeit> [Grund]
+  unban:
+    description: Unban-Command
+    usage: /unban <Spieler>
+  warn:
+    description: Warn-Command
+    usage: /warn <Spieler> <Grund>
