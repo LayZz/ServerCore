@@ -17,7 +17,7 @@ public class cmdCheck implements CommandExecutor {
         if(args.length == 1) {
             if(UUIDLibrary.isRegistred(args[0])) {
                 if(cs instanceof Player) {
-                    ServerCore.sendMessage(SocketTarget.BUNGEECORD, "CHECK", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + ((Player)cs).getUniqueId());
+                    ServerCore.sendMessage(SocketTarget.BUNGEECORD, "CHECK", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getUUIDtoName(cs.getName()));
                     return true;
                 }
                 ServerCore.sendMessage(SocketTarget.BUNGEECORD, "CHECK", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getConsoleUUID());
