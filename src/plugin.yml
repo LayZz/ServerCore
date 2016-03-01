@@ -9,7 +9,7 @@ commands:
     description: Ban-Command
     usage: /ban <Spieler> [Grund]
   check:
-    description: Check-Command
+    description: Checkk-Command
     usage: /check <Spieler>
   kick:
     description: Kick-Command
