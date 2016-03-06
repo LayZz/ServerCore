@@ -13,7 +13,7 @@ public class Data {
     public static Config mysqlCfg;
     public static Config cfg;
     public static MySQL mySQL;
-    public static Config permConf;
+    public static Config levelLog;
     public static Logger console = ServerCore.getInstance().getLogger();
     public static HashMap<Listener, Plugin> listener = new HashMap<>();
 

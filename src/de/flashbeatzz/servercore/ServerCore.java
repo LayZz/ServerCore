@@ -1,7 +1,10 @@
 package de.flashbeatzz.servercore;
 
 import de.flashbeatzz.servercore.commands.ban_commands.*;
+import de.flashbeatzz.servercore.commands.cmdExp;
+import de.flashbeatzz.servercore.commands.cmdServerInfo;
 import de.flashbeatzz.servercore.utils.*;
+import de.flashbeatzz.servercore.utils.levelsystem.LevelSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,6 +36,9 @@ public class ServerCore extends JavaPlugin {
         instance = this;
         Data.console.info("ServerCore is enabling ...");
 
+        Data.levelLog = new Config("LevelLog", getDescription().getName());
+        new LevelSystem();
+
         Data.mysqlCfg = new Config("MySQL", getDescription().getName());
         Data.mysqlCfg.addDefault("MySQL.Host", "localhost");
         Data.mysqlCfg.addDefault("MySQL.User", "root");
@@ -58,6 +64,8 @@ public class ServerCore extends JavaPlugin {
         getCommand("tempban").setExecutor(new cmdTempBan());
         getCommand("unban").setExecutor(new cmdUnban());
         getCommand("warn").setExecutor(new cmdWarn());
+        getCommand("exp").setExecutor(new cmdExp());
+        getCommand("serverinfo").setExecutor(new cmdServerInfo());
 
         Data.console.info("ServerCore successfully enabled.");
     }
