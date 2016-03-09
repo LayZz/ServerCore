@@ -1,6 +1,5 @@
 package de.flashbeatzz.servercore;
 
-import de.flashbeatzz.servercore.commands.ban_commands.*;
 import de.flashbeatzz.servercore.commands.cmdExp;
 import de.flashbeatzz.servercore.commands.cmdServerInfo;
 import de.flashbeatzz.servercore.utils.*;
@@ -58,12 +57,6 @@ public class ServerCore extends JavaPlugin {
 
         new Thread(new SocketReadThread()).start();
 
-        getCommand("ban").setExecutor(new cmdBan());
-        getCommand("check").setExecutor(new cmdCheck());
-        getCommand("kick").setExecutor(new cmdKick());
-        getCommand("tempban").setExecutor(new cmdTempBan());
-        getCommand("unban").setExecutor(new cmdUnban());
-        getCommand("warn").setExecutor(new cmdWarn());
         getCommand("exp").setExecutor(new cmdExp());
         getCommand("serverinfo").setExecutor(new cmdServerInfo());
 
