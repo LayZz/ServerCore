@@ -19,7 +19,7 @@ public class LevelSystem {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
 
     public static Integer getTotalEXP(UUID uuid) {
@@ -97,7 +97,7 @@ public class LevelSystem {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return 0;
     }
 
     public static Boolean exist(UUID uuid) {
