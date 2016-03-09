@@ -23,10 +23,10 @@ public class cmdKick implements CommandExecutor {
             }
             reason = reason.trim();
             if(cs instanceof Player) {
-                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "KICK", UUIDLibrary.getUUIDtoName(cs.getName()) + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + reason);
+                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "KICK", UUIDLibrary.getUUIDtoName(cs.getName()) + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + reason, false);
                 return true;
             }
-            ServerCore.sendMessage(SocketTarget.BUNGEECORD, "KICK", UUIDLibrary.getConsoleUUID() + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + reason);
+            ServerCore.sendMessage(SocketTarget.BUNGEECORD, "KICK", UUIDLibrary.getConsoleUUID() + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + reason, false);
             return true;
         } else {
             cs.sendMessage("§cFalsche Verwendung: /kick <Spieler> [Grund]");

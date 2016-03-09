@@ -21,7 +21,7 @@ public class ServerCore extends JavaPlugin {
         Data.console.info("ServerCore is disabling ...");
 
         Data.mySQL.closeConnection();
-        sendMessage(SocketTarget.BUNGEECORD, "SYSTEM", "DISCONNECT " + Bukkit.getServer().getServerName());
+        sendMessage(SocketTarget.BUNGEECORD, "SYSTEM", "DISCONNECT " + Bukkit.getServer().getServerName(), false);
 
         Data.console.info("ServerCore successfully disabled.");
     }
@@ -54,7 +54,7 @@ public class ServerCore extends JavaPlugin {
         Data.cfg = new Config("Config", getDescription().getName());
 
         createSocket();
-        sendMessage(SocketTarget.BUNGEECORD, "SYSTEM", "CONNECT " + Bukkit.getServer().getServerName());
+        sendMessage(SocketTarget.BUNGEECORD, "SYSTEM", "CONNECT " + Bukkit.getServer().getServerName(), false);
 
         new Thread(new SocketReadThread()).start();
 
@@ -70,8 +70,8 @@ public class ServerCore extends JavaPlugin {
         Data.console.info("ServerCore successfully enabled.");
     }
 
-    public static void sendMessage(String target, String header, String message) {
-        String fString = target + "/§§/" + header + "/§§/" + message;
+    public static void sendMessage(String target, String header, String message, boolean sendSelf) {
+        String fString = target + "/§§/" + header + "/§§/" + message + (sendSelf ? "TRUE" : "FALSE");
         printWriter.println(fString);
         printWriter.flush();
     }
@@ -79,8 +79,8 @@ public class ServerCore extends JavaPlugin {
     private static PrintWriter printWriter;
     private static Scanner scanner;
 
-    public static void sendMessage(SocketTarget target, String header, String message) {
-        String fString = target.get() + "/§§/" + header + "/§§/" + message;
+    public static void sendMessage(SocketTarget target, String header, String message, boolean sendSelf) {
+        String fString = target.get() + "/§§/" + header + "/§§/" + message + "/§§/" + (sendSelf ? "TRUE" : "FALSE");
         printWriter.println(fString);
         printWriter.flush();
     }
@@ -89,7 +89,7 @@ public class ServerCore extends JavaPlugin {
 
     public void createSocket() {
         try {
-            socket = new Socket("109.230.231.247", 19888);
+            socket = new Socket("localhost", 19888);
             printWriter = new PrintWriter(socket.getOutputStream());
             scanner = new Scanner(socket.getInputStream());
         } catch (IOException e) {

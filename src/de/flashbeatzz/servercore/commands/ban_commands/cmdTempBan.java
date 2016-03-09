@@ -23,10 +23,10 @@ public class cmdTempBan implements CommandExecutor {
             }
             reason = reason.trim();
             if(cs instanceof Player) {
-                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "TEMPBAN", UUIDLibrary.getUUIDtoName(cs.getName()) + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + args[1] + "<>" + reason);
+                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "TEMPBAN", UUIDLibrary.getUUIDtoName(cs.getName()) + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + args[1] + "<>" + reason, false);
                 return true;
             }
-            ServerCore.sendMessage(SocketTarget.BUNGEECORD, "TEMPBAN", UUIDLibrary.getConsoleUUID() + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + args[1] + "<>" + reason);
+            ServerCore.sendMessage(SocketTarget.BUNGEECORD, "TEMPBAN", UUIDLibrary.getConsoleUUID() + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + args[1] + "<>" + reason, false);
             return true;
         } else {
             cs.sendMessage("§cFalsche Verwendung: /tempban <Spieler> <Zeit> (z.B. 1h30m) [Grund]");

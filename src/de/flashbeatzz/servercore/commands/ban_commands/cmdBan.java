@@ -23,10 +23,10 @@ public class cmdBan implements CommandExecutor{
             }
             reason = reason.trim();
             if(cs instanceof Player) {
-                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "BAN", ((Player) cs).getUniqueId() + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + reason);
+                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "BAN", ((Player) cs).getUniqueId() + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + reason, false);
                 return true;
             }
-            ServerCore.sendMessage(SocketTarget.BUNGEECORD, "BAN", UUIDLibrary.getConsoleUUID() + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + reason);
+            ServerCore.sendMessage(SocketTarget.BUNGEECORD, "BAN", UUIDLibrary.getConsoleUUID() + "<>" + UUIDLibrary.getUUIDtoName(args[0]) + "<>" + reason, false);
             return true;
         } else {
             cs.sendMessage("§cFalsche Verwendung: /ban <Spieler> [Grund]");

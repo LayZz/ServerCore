@@ -15,10 +15,10 @@ public class cmdUnban implements CommandExecutor {
 
         if(args.length == 1) {
             if(cs instanceof Player) {
-                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "UNBAN",  UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getUUIDtoName(cs.getName()));
+                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "UNBAN",  UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getUUIDtoName(cs.getName()), false);
                 return true;
             }
-            ServerCore.sendMessage(SocketTarget.BUNGEECORD, "UNBAN", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getConsoleUUID());
+            ServerCore.sendMessage(SocketTarget.BUNGEECORD, "UNBAN", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getConsoleUUID(), false);
             return true;
         } else {
             cs.sendMessage("§cFalsche Verwendung: /unban <Spieler>");

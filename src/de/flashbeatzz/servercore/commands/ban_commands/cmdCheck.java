@@ -17,10 +17,10 @@ public class cmdCheck implements CommandExecutor {
         if(args.length == 1) {
             if(UUIDLibrary.isRegistred(args[0])) {
                 if(cs instanceof Player) {
-                    ServerCore.sendMessage(SocketTarget.BUNGEECORD, "CHECK", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getUUIDtoName(cs.getName()));
+                    ServerCore.sendMessage(SocketTarget.BUNGEECORD, "CHECK", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getUUIDtoName(cs.getName()), false);
                     return true;
                 }
-                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "CHECK", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getConsoleUUID());
+                ServerCore.sendMessage(SocketTarget.BUNGEECORD, "CHECK", UUIDLibrary.getUUIDtoName(args[0]) + "<>" + UUIDLibrary.getConsoleUUID(), false);
                 return true;
             } else {
                 cs.sendMessage("§cDer Spieler §6" + args[0] + "§c existiert nicht!");
