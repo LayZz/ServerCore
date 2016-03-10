@@ -122,7 +122,7 @@ public class LevelSystem {
     public enum ExpFrom {
         GAME,
         ACHIEVEMENT,
-        QUEST
+        QUEST,
     }
 
 }
