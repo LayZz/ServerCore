@@ -64,7 +64,7 @@ public class ServerCore extends JavaPlugin {
     }
 
     public static void sendMessage(String target, String header, String message, boolean sendSelf) {
-        String fString = target + "/§§/" + header + "/§§/" + message + (sendSelf ? "TRUE" : "FALSE");
+        String fString = target + "/§§/" + header + "/§§/" + message + "/§§/" + (sendSelf ? "TRUE" : "FALSE");
         printWriter.println(fString);
         printWriter.flush();
     }
