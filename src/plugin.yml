@@ -5,25 +5,11 @@ main: de.flashbeatzz.servercore.ServerCore
 author: [flashbeatz, ohne_name0815]
 
 commands:
-  ban:
-    description: Ban-Command
-    usage: /ban <name> [reason]
-  check:
-    description: Checkk-Command
-    usage: /check <name>
-  kick:
-    description: Kick-Command
-    usage: /kick <name> [reason]
-  tempban:
-    description: Temoban-Command
-    usage: /ban <name> <time> [reason]
-  unban:
-    description: Unban-Command
-    usage: /unban <name>
-  warn:
-    description: Warn-Command
-    usage: /warn <name> <reason>
   exp:
     description: Exp-Command
     usage: /exp <name> [<add | set | rem> <amount>]
     aliases: xp
+  serverinfo:
+    description: Serverinfo-Command
+    usage: /serverinfo
+    aliases: si
