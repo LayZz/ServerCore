@@ -20,7 +20,7 @@ public class ServerCore extends JavaPlugin {
         Data.console.info("ServerCore is disabling ...");
 
         Data.mySQL.closeConnection();
-        sendMessage(SocketTarget.BUNGEECORD, "SYSTEM", "DISCONNECT " + Bukkit.getServer().getServerName(), false);
+        sendMessage(SocketTarget.BUNGEECORD, "DISCONNECT", "", false);
 
         Data.console.info("ServerCore successfully disabled.");
     }
@@ -53,7 +53,7 @@ public class ServerCore extends JavaPlugin {
         Data.cfg = new Config("Config", getDescription().getName());
 
         createSocket();
-        sendMessage(SocketTarget.BUNGEECORD, "SYSTEM", "CONNECT " + Bukkit.getServer().getServerName(), false);
+        sendMessage(SocketTarget.BUNGEECORD, "CONNECT", Bukkit.getServer().getServerName(), false);
 
         new Thread(new SocketReadThread()).start();
 
