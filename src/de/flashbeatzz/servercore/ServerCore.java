@@ -21,7 +21,6 @@ public class ServerCore extends JavaPlugin {
 
         Data.mySQL.closeConnection();
         sendMessage(SocketTarget.BUNGEECORD, "DISCONNECT", "", false);
-
         Data.console.info("ServerCore successfully disabled.");
     }
 

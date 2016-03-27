@@ -18,7 +18,7 @@ public class GuildeSystem implements Listener {
 
     public static Boolean newGuilde(String name, UUID founder) {
         if(!exist(name)) {
-            MySQL.update("INSERT INTO `guildes` (`name`, `founder_uuid`, `money`) VALUES ('" + name + "', '" + founder.toString() + "', '0');");
+            MySQL.update("INSERT INTO `guildes` (`name`, `founder_uuid`, `tag`, `money`) VALUES ('" + name + "', '" + founder.toString() + "', '', '0');");
             return true;
         }
         return false;

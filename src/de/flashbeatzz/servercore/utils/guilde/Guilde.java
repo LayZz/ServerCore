@@ -1,6 +1,7 @@
 package de.flashbeatzz.servercore.utils.guilde;
 
 import de.flashbeatzz.servercore.utils.MySQL;
+import org.bukkit.Bukkit;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,23 +41,11 @@ public class Guilde {
         return id;
     }
 
-    public Tag getTagObject() {
-        ResultSet rs = MySQL.query("SELECT * FROM `guildes` WHERE `name`='" + name + "' OR `id`='" + id + "';");
-        try {
-            if(rs != null && rs.next()) {
-                return Tag.fromString(rs.getString("tag"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public String getTagString() {
         ResultSet rs = MySQL.query("SELECT * FROM `guildes` WHERE `name`='" + name + "' OR `id`='" + id + "';");
         try {
             if(rs != null && rs.next()) {
-                return Tag.fromString(rs.getString("tag")).asString();
+                return rs.getString("tag");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,6 +65,12 @@ public class Guilde {
         return null;
     }
 
+    public void broadcast(String msg) {
+        for(UUID u : getMembers()) {
+            Bukkit.getPlayer(u).sendMessage(msg);
+        }
+    }
+
     public void addMoney(Double amount) {
         MySQL.update("UPDATE `guildes` SET `money`='" + (getMoney() + amount) + "' WHERE `name`='" + this.name + "' OR `id`='" + id + "';");
     }
@@ -91,12 +86,14 @@ public class Guilde {
         MySQL.update("UPDATE `guildes` SET `money`='" + amount + "' WHERE `name`='" + this.name + "' OR `id`='" + id + "';");
     }
 
-    public void setTag(Tag tag) {
-        MySQL.update("UPDATE `guildes` SET `tag`='" + tag.asString() + "' WHERE `name`='" + this.name + "' OR `id`='" + id + "';");
-    }
-
-    public void setTag(String str) {
-        MySQL.update("UPDATE `guildes` SET `tag`='" + str + "' WHERE `name`='" + this.name + "' OR `id`='" + id + "';");
+    public Boolean setTag(String str) {
+        ResultSet rs = MySQL.query("SELECT * FROM `guildes` WHERE `tag`='" + str + "';");
+        try {
+            return !(rs != null && rs.next());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public List<UUID> getMembers() {
@@ -111,6 +108,11 @@ public class Guilde {
         }
         uuid.add(getFounder());
         return uuid;
+    }
+
+    public void disband() {
+        MySQL.update("DELETE * FROM `guildes` WHERE `id`='" + id + "';");
+        MySQL.update("DELETE * FROM `guilde_members` WHERE `guilde_id`='" + id + "';");
     }
 
     public String getName() {
@@ -130,11 +132,16 @@ public class Guilde {
     }
 
     public void setFounder(UUID founder) {
-        MySQL.update("UPDATE `guildes` SET `founder_uuid`='" + founder.toString() + "' WHERE `name`='" + this.name + "';");
+        MySQL.update("UPDATE `guile_members` SET `uuid`='" + getFounder().toString() + "' WHERE `guilde_id`='" + id + "';");
+        MySQL.update("UPDATE `guildes` SET `founder_uuid`='" + founder.toString() + "' WHERE `id`='" + id + "';");
     }
 
-    public void setName(String name) {
-        MySQL.update("UPDATE `guildes` SET `name`='" + name + "' WHERE `name`='" + this.name + "' OR `id`='" + id + "';");
+    public Boolean setName(String name) {
+        if(!GuildeSystem.exist(name)) {
+            MySQL.update("UPDATE `guildes` SET `name`='" + name + "' WHERE `name`='" + this.name + "' OR `id`='" + id + "';");
+            return true;
+        }
+        return false;
     }
 
     public Boolean addMember(UUID uuid) {
