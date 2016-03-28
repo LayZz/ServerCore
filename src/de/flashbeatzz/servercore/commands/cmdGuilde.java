@@ -215,6 +215,7 @@ public class cmdGuilde implements CommandExecutor {
                     if (args[1].equalsIgnoreCase("add")) {
                         Guilde g = GuildeSystem.getGuilde(p.getUniqueId());
                         if(g != null) {
+                            //MONEY API NEEDED
                             g.addMoney(Double.valueOf(args[2]));
                             p.sendMessage("§7You successfully payed the amount.");
                             return true;
