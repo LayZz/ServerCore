@@ -1,8 +1,11 @@
 package de.flashbeatzz.servercore;
 
 import de.flashbeatzz.servercore.commands.cmdExp;
+import de.flashbeatzz.servercore.commands.cmdGuilde;
 import de.flashbeatzz.servercore.commands.cmdServerInfo;
+import de.flashbeatzz.servercore.listener.MessageListener;
 import de.flashbeatzz.servercore.utils.*;
+import de.flashbeatzz.servercore.utils.guilde.GuildeSystem;
 import de.flashbeatzz.servercore.utils.levelsystem.LevelSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -58,6 +61,10 @@ public class ServerCore extends JavaPlugin {
 
         getCommand("exp").setExecutor(new cmdExp());
         getCommand("serverinfo").setExecutor(new cmdServerInfo());
+        getCommand("guilde").setExecutor(new cmdGuilde());
+
+        Bukkit.getPluginManager().registerEvents(new MessageListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GuildeSystem(), this);
 
         Data.console.info("ServerCore successfully enabled.");
     }
