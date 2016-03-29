@@ -4,6 +4,8 @@ import de.flashbeatzz.servercore.commands.cmdExp;
 import de.flashbeatzz.servercore.commands.cmdGuilde;
 import de.flashbeatzz.servercore.commands.cmdServerInfo;
 import de.flashbeatzz.servercore.listener.MessageListener;
+import de.flashbeatzz.servercore.listener.PlayerPreLoginListener;
+import de.flashbeatzz.servercore.listener.PlayerQuitListener;
 import de.flashbeatzz.servercore.utils.*;
 import de.flashbeatzz.servercore.utils.guilde.GuildeSystem;
 import de.flashbeatzz.servercore.utils.levelsystem.LevelSystem;
@@ -76,6 +78,8 @@ public class ServerCore extends JavaPlugin {
         Data.console.info("Registering events...");
         Bukkit.getPluginManager().registerEvents(new MessageListener(), this);
         Bukkit.getPluginManager().registerEvents(new GuildeSystem(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerPreLoginListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
         Data.console.info("Events registered!");
 
         Data.console.info("ServerCore successfully enabled.");
@@ -126,7 +130,7 @@ public class ServerCore extends JavaPlugin {
 
     public static Socket socket;
 
-    public boolean createSocket() throws IOException {
+    public void createSocket() throws IOException {
         socket = new Socket("localhost", 19888);
         printWriter = new PrintWriter(socket.getOutputStream());
         scanner = new Scanner(socket.getInputStream());
