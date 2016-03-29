@@ -106,7 +106,6 @@ public class Guilde {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        uuid.add(getFounder());
         return uuid;
     }
 
@@ -132,7 +131,6 @@ public class Guilde {
     }
 
     public void setFounder(UUID founder) {
-        MySQL.update("UPDATE `guile_members` SET `uuid`='" + getFounder().toString() + "' WHERE `guilde_id`='" + id + "';");
         MySQL.update("UPDATE `guildes` SET `founder_uuid`='" + founder.toString() + "' WHERE `id`='" + id + "';");
     }
 
@@ -147,7 +145,7 @@ public class Guilde {
     public Boolean addMember(UUID uuid) {
         Guilde g = GuildeSystem.getGuilde(uuid);
         if(g == null) {
-            MySQL.update("INSERT INTO `guilde_members` (`uuid`, `guilde_name`) VALUES ('" + uuid.toString() + "', '" + this.name + "');");
+            MySQL.update("INSERT INTO `userdata` (`guilde_id`) VALUES ('" + this.id + "') WHERE `uuid`='" + uuid.toString() + "';");
             return true;
         }
         return false;
@@ -159,7 +157,7 @@ public class Guilde {
 
     public void removeMember(UUID uuid) {
         if(getMembers().contains(uuid)) {
-            MySQL.update("DELETE * FROM `guilde_members` WHERE `uuid`='" + uuid.toString() + "';");
+            MySQL.update("DELETE `guilde_id` FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         }
     }
 }

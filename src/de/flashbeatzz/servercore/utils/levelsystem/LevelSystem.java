@@ -11,7 +11,7 @@ import java.util.UUID;
 public class LevelSystem {
 
     public static Integer getEXPLevel(UUID uuid) {
-        ResultSet rs = MySQL.query("SELECT * FROM `levelsystem` WHERE `uuid`='" + uuid.toString() + "';");
+        ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         try {
             if(rs != null && rs.next()) {
                 return rs.getInt("exp");
@@ -25,7 +25,7 @@ public class LevelSystem {
     public static Integer getTotalEXP(UUID uuid) {
         Integer lvl = 0;
         Integer exp = 0;
-        ResultSet rs = MySQL.query("SELECT * FROM `levelsystem` WHERE `uuid`='" + uuid.toString() + "';");
+        ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         try {
             if(rs != null && rs.next()) {
                 lvl = rs.getInt("level");
@@ -52,7 +52,7 @@ public class LevelSystem {
             lvl = i++;
             Bukkit.getPluginManager().callEvent(new LevelChangeEvent(uuid, lvlBefore, lvl));
         }
-        MySQL.update("UPDATE `levelsystem` SET `level`='" + lvl + "', `exp`='" + exp + "' WHERE `uuid`='" + uuid.toString() + "';");
+        MySQL.update("UPDATE `userdata` SET `level`='" + lvl + "', `exp`='" + exp + "' WHERE `uuid`='" + uuid.toString() + "';");
         return true;
     }
 
@@ -68,7 +68,7 @@ public class LevelSystem {
             Bukkit.getPluginManager().callEvent(new LevelChangeEvent(uuid, lvl.toInt() - 1, lvl.toInt()));
             Exp -= (exp + Exp) - lvl.MAX_EXP;
         }
-        MySQL.update("UPDATE `levelsystem` SET `level`='" + lvl + "', `exp`='" + Exp + "' WHERE `uuid`='" + uuid.toString() + "';");
+        MySQL.update("UPDATE `userdara` SET `level`='" + lvl + "', `exp`='" + Exp + "' WHERE `uuid`='" + uuid.toString() + "';");
         return true;
 
     }
@@ -83,13 +83,13 @@ public class LevelSystem {
             lvl -= i;
             Exp -= lvlExp;
         }
-        MySQL.update("UPDATE `levelsystem` SET `level`='" + lvl + "', `exp`='" + Exp + "' WHERE `uuid`='" + uuid.toString() + "';");
+        MySQL.update("UPDATE `userdata` SET `level`='" + lvl + "', `exp`='" + Exp + "' WHERE `uuid`='" + uuid.toString() + "';");
         return true;
 
     }
 
     public static Integer getLevel(UUID uuid) {
-        ResultSet rs = MySQL.query("SELECT * FROM `levelsystem` WHERE `uuid`='" + uuid.toString() + "';");
+        ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         try {
             if(rs != null && rs.next()) {
                 return rs.getInt("level");
@@ -101,7 +101,7 @@ public class LevelSystem {
     }
 
     public static Boolean exist(UUID uuid) {
-        ResultSet rs = MySQL.query("SELECT * FROM `levelsystem` WHERE `uuid`='" + uuid.toString() + "';");
+        ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         try {
             if(rs != null && rs.next()) {
                 return true;

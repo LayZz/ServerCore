@@ -97,7 +97,7 @@ public class ServerCore extends JavaPlugin {
     private void initMessages() {
         ResultSet resultSet = MySQL.query("SELECT * FROM `messages`");
         try {
-            while (resultSet.next()) {
+            while (resultSet != null && resultSet.next()) {
                 String tag = resultSet.getString("tag");
                 String german = resultSet.getString("german");
                 String english = resultSet.getString("english");
