@@ -32,7 +32,6 @@ public class MySQL {
         Data.console.info("Opening MySQL-Connection ...");
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + data + "?autoReconnect=true", user, pass);
-            Data.console.info("Successfully connected.");
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -39,11 +39,49 @@ public class ServerCore extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        Data.console.info("ServerCore is enabling ...");
+        Data.console.info("Enabling ServerCore...");
 
-        Data.levelLog = new Config("LevelLog", getDescription().getName());
-        new LevelSystem();
+        Data.console.info("Creating config files if they don't exist...");
+        createConfigFiles();
+        Data.console.info("Config files created!");
 
+        Data.mySQL = new MySQL();
+        Data.console.info("Creating MySQL connection...");
+        if (!Data.mySQL.openConnection()) {
+            Data.console.info("Error while connecting to MySQL Database... Shutdown server!");
+            Bukkit.getServer().shutdown();
+        }
+        Data.console.info("MySQL successfully connected!");
+
+        Data.console.info("Initializing messages...");
+        initMessages();
+        Data.console.info(Messages.messages.size() + " messages created!");
+
+        Data.console.info("Creating socket...");
+        try {
+            createSocket();
+            Data.console.info("Socket created! Listening on " + socket.getLocalAddress().toString() + ":" + socket.getLocalPort());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        sendMessage(SocketTarget.BUNGEECORD, "CONNECT", Bukkit.getServer().getServerName(), false);
+        new Thread(new SocketReadThread()).start();
+
+        Data.console.info("Registering commands...");
+        getCommand("exp").setExecutor(new cmdExp());
+        getCommand("serverinfo").setExecutor(new cmdServerInfo());
+        getCommand("guilde").setExecutor(new cmdGuilde());
+        Data.console.info("Commands registered!");
+
+        Data.console.info("Registering events...");
+        Bukkit.getPluginManager().registerEvents(new MessageListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GuildeSystem(), this);
+        Data.console.info("Events registered!");
+
+        Data.console.info("ServerCore successfully enabled.");
+    }
+
+    private void createConfigFiles() {
         Data.mysqlCfg = new Config("MySQL", getDescription().getName());
         Data.mysqlCfg.addDefault("MySQL.Host", "localhost");
         Data.mysqlCfg.addDefault("MySQL.User", "root");
@@ -52,26 +90,8 @@ public class ServerCore extends JavaPlugin {
         Data.mysqlCfg.addDefault("MySQL.Port", 3306);
         Data.mysqlCfg.copyAndSave(true);
 
-        Data.mySQL = new MySQL();
-        if(!Data.mySQL.openConnection()) {
-            Bukkit.getServer().shutdown();
-        }
-        initMessages();
-        Data.cfg = new Config("Config", getDescription().getName());
-
-        createSocket();
-        sendMessage(SocketTarget.BUNGEECORD, "CONNECT", Bukkit.getServer().getServerName(), false);
-
-        new Thread(new SocketReadThread()).start();
-
-        getCommand("exp").setExecutor(new cmdExp());
-        getCommand("serverinfo").setExecutor(new cmdServerInfo());
-        getCommand("guilde").setExecutor(new cmdGuilde());
-
-        Bukkit.getPluginManager().registerEvents(new MessageListener(), this);
-        Bukkit.getPluginManager().registerEvents(new GuildeSystem(), this);
-
-        Data.console.info("ServerCore successfully enabled.");
+        //Data.levelLog = new Config("LevelLog", getDescription().getName());
+        //Data.cfg = new Config("Config", getDescription().getName());
     }
 
     private void initMessages() {
@@ -106,14 +126,10 @@ public class ServerCore extends JavaPlugin {
 
     public static Socket socket;
 
-    public void createSocket() {
-        try {
-            socket = new Socket("localhost", 19888);
-            printWriter = new PrintWriter(socket.getOutputStream());
-            scanner = new Scanner(socket.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public boolean createSocket() throws IOException {
+        socket = new Socket("localhost", 19888);
+        printWriter = new PrintWriter(socket.getOutputStream());
+        scanner = new Scanner(socket.getInputStream());
     }
 
     public static ServerCore getInstance() {
