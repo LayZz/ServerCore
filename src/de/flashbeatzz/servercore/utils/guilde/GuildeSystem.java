@@ -19,6 +19,7 @@ public class GuildeSystem implements Listener {
     public static Boolean newGuilde(String name, UUID founder) {
         if(!exist(name)) {
             MySQL.update("INSERT INTO `guildes` (`name`, `founder_uuid`, `tag`, `money`) VALUES ('" + name + "', '" + founder.toString() + "', '', '0');");
+            new Guilde(name).addMember(founder);
             return true;
         }
         return false;
@@ -59,7 +60,7 @@ public class GuildeSystem implements Listener {
     }
 
     public static Guilde getGuilde(UUID uuid) {
-        ResultSet rs = MySQL.query("SELECT * FROM `guilde_members` WHERE `uuid`='" + uuid.toString() + "';");
+        ResultSet rs = MySQL.query("SELECT `guilde_id` FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         try {
             if(rs != null && rs.next()) {
                 return new Guilde(rs.getInt("guilde_id"));

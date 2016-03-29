@@ -9,7 +9,7 @@ public class UUIDLibrary {
     public static UUID getUUIDtoName(String name) {
         if(isRegistred(name)) {
             try {
-                ResultSet rs = MySQL.query("SELECT * FROM `uuid_library` WHERE `name`='" + name + "';");
+                ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `name`='" + name + "';");
                 if(rs != null && rs.next()) {
                     return UUID.fromString(rs.getString("uuid"));
                 }
@@ -23,7 +23,7 @@ public class UUIDLibrary {
     public static String getNameToUUID(UUID uuid) {
         if(isRegistred(uuid)) {
             try {
-                ResultSet rs = MySQL.query("SELECT * FROM `uuid_library` WHERE `uuid`='" + uuid + "';");
+                ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `uuid`='" + uuid + "';");
                 if(rs != null && rs.next()) {
                     return rs.getString("name");
                 }
@@ -35,7 +35,7 @@ public class UUIDLibrary {
     }
 
     public static Boolean isRegistred(UUID uuid) {
-        ResultSet rs = MySQL.query("SELECT * FROM `uuid_library` WHERE `uuid`='" + uuid.toString() + "';");
+        ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         try {
             return rs != null && rs.next();
         } catch (SQLException e) {
@@ -45,7 +45,7 @@ public class UUIDLibrary {
     }
 
     public static Boolean isRegistred(String name) {
-        ResultSet rs = MySQL.query("SELECT * FROM `uuid_library` WHERE `name`='" + name + "';");
+        ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `name`='" + name + "';");
         try {
             return rs != null && rs.next();
         } catch (SQLException e) {
