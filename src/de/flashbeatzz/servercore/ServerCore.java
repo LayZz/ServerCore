@@ -7,12 +7,16 @@ import de.flashbeatzz.servercore.listener.MessageListener;
 import de.flashbeatzz.servercore.utils.*;
 import de.flashbeatzz.servercore.utils.guilde.GuildeSystem;
 import de.flashbeatzz.servercore.utils.levelsystem.LevelSystem;
+import de.flashbeatzz.servercore.utils.messages.Message;
+import de.flashbeatzz.servercore.utils.messages.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class ServerCore extends JavaPlugin {
@@ -52,6 +56,7 @@ public class ServerCore extends JavaPlugin {
         if(!Data.mySQL.openConnection()) {
             Bukkit.getServer().shutdown();
         }
+        initMessages();
         Data.cfg = new Config("Config", getDescription().getName());
 
         createSocket();
@@ -67,6 +72,21 @@ public class ServerCore extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new GuildeSystem(), this);
 
         Data.console.info("ServerCore successfully enabled.");
+    }
+
+    private void initMessages() {
+        ResultSet resultSet = MySQL.query("SELECT * FROM `messages`");
+        try {
+            while (resultSet.next()) {
+                String tag = resultSet.getString("tag");
+                String german = resultSet.getString("german");
+                String english = resultSet.getString("english");
+
+                Messages.messages.put(tag, new Message(tag, german, english));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void sendMessage(String target, String header, String message, boolean sendSelf) {
