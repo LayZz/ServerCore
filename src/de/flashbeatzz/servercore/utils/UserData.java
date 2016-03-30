@@ -8,9 +8,16 @@ import java.util.UUID;
 public class UserData {
 
     private static HashMap<UUID, UserData> userDatas = new HashMap<>();
+
     public static UserData getUserData(UUID uuid) {
-        return userDatas.get(uuid);
+        if (userDatas.containsKey(uuid)) {
+            return userDatas.get(uuid);
+        } else {
+            UserData userData = new UserData("", uuid);
+            return (userData.isValid ? userData : null);
+        }
     }
+
     public static void removeUserData(UUID uuid) {
         userDatas.remove(uuid);
     }
@@ -33,7 +40,9 @@ public class UserData {
         try {
             load();
             isValid = true;
-            userDatas.put(uuid, UserData.this);
+            if (!name.equals("")) {
+                userDatas.put(uuid, UserData.this);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -46,8 +55,12 @@ public class UserData {
     public void load() throws SQLException {
         ResultSet resultSet = MySQL.query("SELECT * FROM `userdata` WHERE `uuid` = '" + uuid.toString() + "'");
         if (resultSet.next()) {
+            if (name.equals("")) {
+                name = resultSet.getString("name");
+            }
             level = resultSet.getInt("level");
             exp = resultSet.getInt("exp");
+            money = resultSet.getInt("money");
         } else {
             insert();
         }
@@ -68,6 +81,7 @@ public class UserData {
 
     public void setMoney(int money) {
         this.money = money;
+        save();
     }
 
     public int getLevel() {
@@ -76,6 +90,7 @@ public class UserData {
 
     public void setLevel(int level) {
         this.level = level;
+        save();
     }
 
     public int getExp() {
@@ -84,5 +99,7 @@ public class UserData {
 
     public void setExp(int exp) {
         this.exp = exp;
+        save();
     }
+
 }
