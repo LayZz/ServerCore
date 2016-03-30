@@ -25,8 +25,7 @@ public class UserData {
     private String name;
     private UUID uuid;
 
-    // TODO: 29.03.2016 add player guild
-
+    private int guild_id = -1;
     private int money = 0;
     private int level = 0;
     private int exp = 0;
@@ -58,6 +57,7 @@ public class UserData {
             if (name.equals("")) {
                 name = resultSet.getString("name");
             }
+            guild_id = resultSet.getInt("guild_id");
             level = resultSet.getInt("level");
             exp = resultSet.getInt("exp");
             money = resultSet.getInt("money");
@@ -102,4 +102,11 @@ public class UserData {
         save();
     }
 
+    public int getGuildID() {
+        return guild_id;
+    }
+
+    public void setGuildID(int guild_id) {
+        this.guild_id = guild_id;
+    }
 }
