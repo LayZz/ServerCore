@@ -54,7 +54,7 @@ public class UserData {
 
     public void load() throws SQLException {
         ResultSet resultSet = MySQL.query("SELECT * FROM `userdata` WHERE `uuid` = '" + uuid.toString() + "'");
-        if (resultSet.next()) {
+        if (resultSet != null && resultSet.next()) {
             if (name.equals("")) {
                 name = resultSet.getString("name");
             }

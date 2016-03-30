@@ -67,7 +67,7 @@ public class cmdGuilde implements CommandExecutor {
                         InviteRunnable.pendingInvites.remove(p.getUniqueId());
                         if(g.addMember(p.getUniqueId())) {
                             g.broadcast("§7" + p.getName() + " joined your guilde.");
-                            p.sendMessage("§aYou joined guilde \"" + g.getName() + " - " + g.getTagString() + "\n.");
+                            p.sendMessage("§aYou joined guilde \"" + g.getName() + " - " + g.getTag() + "\n.");
                             return true;
                         }
                         p.sendMessage("§cYou are already in a guilde. Leave that first if you want to join another.");
@@ -102,16 +102,16 @@ public class cmdGuilde implements CommandExecutor {
                     if(g != null) {
                         String members = "";
                         for(UUID uuid : g.getMembers()) {
-                            members += "  - " + UUIDLibrary.getNameToUUID(uuid) + "\n";
+                            members += "  - " + UUIDLibrary.getName(uuid) + "\n";
                         }
-                        p.sendMessage("§8§l[]======>> §6§l" + g.getName() + " - " + g.getTagString() + " §8§l<<======[]\n" +
+                        p.sendMessage("§8§l[]======>> §6§l" + g.getName() + " - " + g.getTag() + " §8§l<<======[]\n" +
                                 "§dID:      §f" + g.getId() +
                                 "§dName:    §f" + g.getName() +
-                                "§dTag:     §f" + g.getTagString() +
-                                "§dFounder: §f" + UUIDLibrary.getNameToUUID(g.getFounder()) +
-                                "§dMoney:   §f" + g.getMoney() +
+                                "§dTag:     §f" + g.getTag() +
+                                "§dFounder: §f" + UUIDLibrary.getName(g.getFounder()) +
+                                "§dMoney:   §f" + g.getGold() +
                                 "§dMembers: §f\n" + members + "" +
-                                "§8§l[]======>> §6§l\" + g.getName() + \" - \" + g.getTagString() + \" §8§l<<======[]");
+                                "§8§l[]======>> §6§l\" + g.getName() + \" - \" + g.getTag() + \" §8§l<<======[]");
                         return true;
                     }
                     p.sendMessage("§cYou are not in a guilde.");
@@ -133,11 +133,11 @@ public class cmdGuilde implements CommandExecutor {
                     Guilde g = GuildeSystem.getGuilde(p.getUniqueId());
                     if(g != null) {
                         if(g.getFounder().equals(p.getUniqueId())) {
-                            if(!g.getMembers().contains(UUIDLibrary.getUUIDtoName(args[1]))) {
+                            if(!g.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
                                 Bukkit.getPlayer(args[1]).sendMessage("§7You got invited in the guilde.\n" +
                                         new ComponentBuilder("ACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guilde accept")).append("DECLINE").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guilde decline")));
                                 p.sendMessage("§7You invited the player.");
-                                new InviteRunnable(UUIDLibrary.getUUIDtoName(args[1]), g);
+                                new InviteRunnable(UUIDLibrary.getUUID(args[1]), g);
                                 return true;
                             }
                             p.sendMessage("§cThis player is already in your guilde.");
@@ -152,8 +152,8 @@ public class cmdGuilde implements CommandExecutor {
                     Guilde g = GuildeSystem.getGuilde(p.getUniqueId());
                     if(g != null) {
                         if(g.getFounder().equals(p.getUniqueId())) {
-                            if(g.getMembers().contains(UUIDLibrary.getUUIDtoName(args[1]))) {
-                                g.removeMember(UUIDLibrary.getUUIDtoName(args[1]));
+                            if(g.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
+                                g.removeMember(UUIDLibrary.getUUID(args[1]));
                                 p.sendMessage("§7You removed the player.");
                                 return true;
                             }
@@ -169,8 +169,8 @@ public class cmdGuilde implements CommandExecutor {
                     Guilde g = GuildeSystem.getGuilde(p.getUniqueId());
                     if(g != null) {
                         if(g.getFounder().equals(p.getUniqueId())) {
-                            if(g.getMembers().contains(UUIDLibrary.getUUIDtoName(args[1]))) {
-                                g.setFounder(UUIDLibrary.getUUIDtoName(args[1]));
+                            if(g.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
+                                g.setFounder(UUIDLibrary.getUUID(args[1]));
                                 Bukkit.getPlayer(g.getFounder()).sendMessage("§aYou are now the leader of your guilde.");
                                 p.sendMessage("§7You are not longer the leader of your guilde.");
                                 return true;
@@ -188,16 +188,16 @@ public class cmdGuilde implements CommandExecutor {
                     if(g != null) {
                         String members = "";
                         for(UUID uuid : g.getMembers()) {
-                            members += "  - " + UUIDLibrary.getNameToUUID(uuid) + "\n";
+                            members += "  - " + UUIDLibrary.getName(uuid) + "\n";
                         }
-                        p.sendMessage("§8§l[]======>> §6§l" + g.getName() + " - " + g.getTagString() + " §8§l<<======[]\n" +
+                        p.sendMessage("§8§l[]======>> §6§l" + g.getName() + " - " + g.getTag() + " §8§l<<======[]\n" +
                                 "§dID:      §f" + g.getId() +
                                 "§dName:    §f" + g.getName() +
-                                "§dTag:     §f" + g.getTagString() +
-                                "§dFounder: §f" + UUIDLibrary.getNameToUUID(g.getFounder()) +
-                                "§dMoney:   §f" + g.getMoney() +
+                                "§dTag:     §f" + g.getTag() +
+                                "§dFounder: §f" + UUIDLibrary.getName(g.getFounder()) +
+                                "§dMoney:   §f" + g.getGold() +
                                 "§dMembers: §f\n" + members + "" +
-                                "§8§l[]======>> §6§l\" + g.getName() + \" - \" + g.getTagString() + \" §8§l<<======[]");
+                                "§8§l[]======>> §6§l" + g.getName() + " - " + g.getTag() + " §8§l<<======[]");
                         return true;
                     }
                     p.sendMessage("§cThis guilde doesnt exist.");
