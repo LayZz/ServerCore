@@ -1,4 +1,4 @@
-package de.flashbeatzz.servercore.utils.guilde;
+package de.flashbeatzz.servercore.utils.guildsystem;
 
 import de.flashbeatzz.servercore.utils.MySQL;
 import org.bukkit.Bukkit;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Guilde {
+public class Guild {
     private String name;
     private Integer id;
     private String tag;
@@ -17,8 +17,8 @@ public class Guilde {
     private UUID founder;
     private List<UUID> members = new ArrayList<>();
 
-    public Guilde(String name) {
-        ResultSet rs = MySQL.query("SELECT * FROM `guildes` WHERE `name`='" + name + "';");
+    public Guild(String name) {
+        ResultSet rs = MySQL.query("SELECT * FROM `guilds` WHERE `name`='" + name + "';");
         try {
             if(rs != null && rs.next()) {
                 this.name = name;
@@ -26,12 +26,12 @@ public class Guilde {
                 this.tag = rs.getString("tag");
                 this.gold = rs.getDouble("gold");
                 this.founder = UUID.fromString(rs.getString("founder_uuid"));
-                GuildeSystem.getGuildeMap().put(this.name, this);
+                GuildSystem.getguildMap().put(this.name, this);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        ResultSet rs1 = MySQL.query("SELECT * FROM `userdata` WHERE `guilde_id`='" + id + "';");
+        ResultSet rs1 = MySQL.query("SELECT * FROM `userdata` WHERE `guild_id`='" + id + "';");
         try {
             if(rs1 != null && rs1.next()) {
                 members.add(UUID.fromString("uuid"));
@@ -42,13 +42,13 @@ public class Guilde {
         members.add(founder);
     }
 
-    public Guilde(Integer id) {
-        ResultSet rs = MySQL.query("SELECT * FROM `guildes` WHERE `id`='" + id + "';");
+    public Guild(Integer id) {
+        ResultSet rs = MySQL.query("SELECT * FROM `guilds` WHERE `id`='" + id + "';");
         try {
             if(rs != null && rs.next()) {
                 this.name = rs.getString("name");
                 this.id = id;
-                GuildeSystem.getGuildeMap().put(this.name, this);
+                GuildSystem.getguildMap().put(this.name, this);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,25 +75,25 @@ public class Guilde {
 
     public void addMoney(Double amount) {
         gold += amount;
-        MySQL.update("UPDATE `guildes` SET `gold`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
+        MySQL.update("UPDATE `guilds` SET `gold`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
     }
 
     public Boolean removeMoney(Double amount) {
         if(gold - amount < 0) {
             gold -= amount;
-            MySQL.update("UPDATE `guildes` SET `money`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
+            MySQL.update("UPDATE `guilds` SET `money`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
         }
         return false;
     }
 
     public void setMoney(Double amount) {
         gold = amount;
-        MySQL.update("UPDATE `guildes` SET `money`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
+        MySQL.update("UPDATE `guilds` SET `money`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
     }
 
     public Boolean setTag(String str) {
         tag = str;
-        ResultSet rs = MySQL.query("SELECT * FROM `guildes` WHERE `tag`='" + str + "';");
+        ResultSet rs = MySQL.query("SELECT * FROM `guilds` WHERE `tag`='" + str + "';");
         try {
             return !(rs != null && rs.next());
         } catch (SQLException e) {
@@ -107,9 +107,9 @@ public class Guilde {
     }
 
     public void disband() {
-        MySQL.update("DELETE * FROM `guildes` WHERE `id`='" + id + "';");
+        MySQL.update("DELETE * FROM `guilds` WHERE `id`='" + id + "';");
         for(UUID uuid : members) {
-            MySQL.query("UPDATE `userdata` SET `guilde_id`='-1' WHERE `uuid`='" + uuid.toString() + "';");
+            MySQL.query("UPDATE `userdata` SET `guild_id`='-1' WHERE `uuid`='" + uuid.toString() + "';");
         }
     }
 
@@ -123,22 +123,22 @@ public class Guilde {
 
     public void setFounder(UUID founder) {
         this.founder = founder;
-        MySQL.update("UPDATE `guildes` SET `founder_uuid`='" + founder.toString() + "' WHERE `id`='" + id + "';");
+        MySQL.update("UPDATE `guilds` SET `founder_uuid`='" + founder.toString() + "' WHERE `id`='" + id + "';");
     }
 
     public Boolean setName(String name) {
         this.name = name;
-        if(!GuildeSystem.exist(name)) {
-            MySQL.update("UPDATE `guildes` SET `name`='" + name + "' WHERE `name`='" + this.name + "' OR `id`='" + id + "';");
+        if(!GuildSystem.exist(name)) {
+            MySQL.update("UPDATE `guilds` SET `name`='" + name + "' WHERE `name`='" + this.name + "' OR `id`='" + id + "';");
             return true;
         }
         return false;
     }
 
     public Boolean addMember(UUID uuid) {
-        Guilde g = GuildeSystem.getGuilde(uuid);
+        Guild g = GuildSystem.getGuild(uuid);
         if(g == null) {
-            MySQL.update("UPDATE `userdata` SET `guilde_id`='" + this.id + "' WHERE `uuid`='" + uuid.toString() + "';");
+            MySQL.update("UPDATE `userdata` SET `guild_id`='" + this.id + "' WHERE `uuid`='" + uuid.toString() + "';");
             members.add(uuid);
             return true;
         }
@@ -151,7 +151,7 @@ public class Guilde {
 
     public void removeMember(UUID uuid) {
         if(members.contains(uuid)) {
-            MySQL.update("UPDATE `userdata` SET `guilde_id`='-1' WHERE `uuid`='" + uuid.toString() + "';");
+            MySQL.update("UPDATE `userdata` SET `guild_id`='-1' WHERE `uuid`='" + uuid.toString() + "';");
         }
     }
 

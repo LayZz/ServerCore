@@ -1,13 +1,13 @@
 package de.flashbeatzz.servercore;
 
 import de.flashbeatzz.servercore.commands.cmdExp;
-import de.flashbeatzz.servercore.commands.cmdGuilde;
+import de.flashbeatzz.servercore.commands.cmdGuild;
 import de.flashbeatzz.servercore.commands.cmdServerInfo;
 import de.flashbeatzz.servercore.listener.MessageListener;
 import de.flashbeatzz.servercore.listener.PlayerPreLoginListener;
 import de.flashbeatzz.servercore.listener.PlayerQuitListener;
 import de.flashbeatzz.servercore.utils.*;
-import de.flashbeatzz.servercore.utils.guilde.GuildeSystem;
+import de.flashbeatzz.servercore.utils.guildsystem.GuildSystem;
 import de.flashbeatzz.servercore.utils.messages.Message;
 import de.flashbeatzz.servercore.utils.messages.Messages;
 import org.bukkit.Bukkit;
@@ -71,12 +71,12 @@ public class ServerCore extends JavaPlugin {
         Data.console.info("Registering commands...");
         getCommand("exp").setExecutor(new cmdExp());
         getCommand("serverinfo").setExecutor(new cmdServerInfo());
-        getCommand("guilde").setExecutor(new cmdGuilde());
+        getCommand("guildsystem").setExecutor(new cmdGuild());
         Data.console.info("Commands registered!");
 
         Data.console.info("Registering events...");
         Bukkit.getPluginManager().registerEvents(new MessageListener(), this);
-        Bukkit.getPluginManager().registerEvents(new GuildeSystem(), this);
+        Bukkit.getPluginManager().registerEvents(new GuildSystem(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerPreLoginListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
         Data.console.info("Events registered!");

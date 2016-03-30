@@ -1,63 +1,74 @@
 package de.flashbeatzz.servercore.utils.scoreboard;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.UUID;
 
 public class ServerScoreboard {
-    private ScoreboardManager sm;
-    private Scoreboard board;
-    private Objective o;
-    private HashMap<Integer, String> scores = new HashMap<>();
-    private List<Player> players = new ArrayList<>();
+    private static Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+    private static List<UUID> recipients = new ArrayList<>();
 
-    public ServerScoreboard(String name, DisplaySlot ds) {
-        sm = Bukkit.getScoreboardManager();
-        board = sm.getNewScoreboard();
-        o = board.registerNewObjective("obj" + board.getObjectives().size() + 1, "dummy");
-        o.setDisplayName(name);
+    public static void newObjective(String displayname, DisplaySlot ds) {
+        Objective o = board.registerNewObjective(ds.name() + 1, "dummy");
         o.setDisplaySlot(ds);
+        o.setDisplayName(displayname);
     }
 
-    public Team addTeam(String name) {
-        return board.registerNewTeam(name);
+    public static void addLine(DisplaySlot ds, String name, Integer index) {
+        board.getObjective(ds).getScore(name).setScore(index);
     }
 
-    public void addLine(String line, Integer index) {
-        Score score = o.getScore(line);
-        score.setScore(index);
-        scores.put(index, line);
+    public static void modifyLine(DisplaySlot ds, String oldName, String newName) {
+        Integer i = board.getObjective(ds).getScore(oldName).getScore();
+        board.resetScores(oldName);
+        board.getObjective(ds).getScore(newName).setScore(i);
     }
 
-    public Score modifyLine(String name) {
-        return o.getScore(name);
-    }
-
-    public Score modifyLine(Integer index) {
-        for(Integer i : scores.keySet()) {
-            if(Objects.equals(i, index)) {
-                return o.getScore(scores.get(i));
+    public static void setLineIndex(DisplaySlot ds, Integer oldIndex, Integer newIndex) {
+        for(Score s : board.getScores(ds.name())) {
+            if(s.getScore() == oldIndex) {
+                s.setScore(newIndex);
             }
         }
-        return null;
     }
 
-    public void set(Player... players) {
-        for(Player p : players) {
-            p.setScoreboard(board);
-            this.players.add(p);
+    public static Team getTeam(String name) {
+        if(board.getTeam(name) == null) {
+            return board.registerNewTeam(name);
+        }
+        return board.getTeam(name);
+    }
+
+    public static void setDisplayName(DisplaySlot ds, String newName) {
+        board.getObjective(ds).setDisplayName(newName);
+    }
+
+    public static void showFor(UUID... players) {
+        for(UUID u : players) {
+            if(!recipients.contains(u)) {
+                Bukkit.getPlayer(u).setScoreboard(board);
+                recipients.add(u);
+            }
         }
     }
 
-    public void remove() {
-        for(Player p : players) {
-            p.setScoreboard(sm.getNewScoreboard());
+    public static List<UUID> getReciepients() {
+        return recipients;
+    }
+
+    public static void resetFor(UUID... players) {
+        for(UUID u : players) {
+            if(recipients.contains(u)) {
+                Bukkit.getPlayer(u).setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                recipients.remove(u);
+            }
         }
     }
 
+    public static Scoreboard getBoard() {
+        return board;
+    }
 }

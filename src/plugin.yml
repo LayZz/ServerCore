@@ -15,4 +15,4 @@ commands:
     aliases: si
   guilde:
     description: Guilde-Command
-    usage: /guilde help
+    usage: /guildsystem help

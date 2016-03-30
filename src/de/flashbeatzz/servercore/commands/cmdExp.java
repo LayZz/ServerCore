@@ -28,7 +28,7 @@ public class cmdExp implements CommandExecutor {
         //    /exp <name> [<set/add/rem> amount]
         if(args.length == 3) {
             Integer amount = Integer.valueOf(args[2]);
-            Player target = Bukkit.getPlayer(UUIDLibrary.getUUIDtoName(args[0]));
+            Player target = Bukkit.getPlayer(UUIDLibrary.getUUID(args[0]));
             if (args[1].equals("add")) {
                 if (LevelSystem.addExp(target.getUniqueId(), amount)) {
                     Data.levelLog.addDefault("[" + new Timestamp(new Date().getTime()) + "]:", logName + " added " + amount + " exp to the account of " + target.getName());
@@ -55,7 +55,7 @@ public class cmdExp implements CommandExecutor {
                 return true;
             }
         } else if(args.length == 1) {
-            UUID uuid = UUIDLibrary.getUUIDtoName(args[0]);
+            UUID uuid = UUIDLibrary.getUUID(args[0]);
             Player target = Bukkit.getPlayer(uuid);
             if(LevelSystem.exist(target.getUniqueId())) {
                 cs.sendMessage("§8§l[]======>> §6§lLEVEL | XP - " + target.getName() + " §8§l<<======[]\n" +
