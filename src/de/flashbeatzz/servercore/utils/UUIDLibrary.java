@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public class UUIDLibrary {
 
-    public static UUID getUUIDtoName(String name) {
-        if(isRegistred(name)) {
+    public static UUID getUUID(String name) {
+        if(isRegistered(name)) {
             try {
                 ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `name`='" + name + "';");
                 if(rs != null && rs.next()) {
@@ -20,8 +20,8 @@ public class UUIDLibrary {
         return null;
     }
 
-    public static String getNameToUUID(UUID uuid) {
-        if(isRegistred(uuid)) {
+    public static String getName(UUID uuid) {
+        if(isRegistered(uuid)) {
             try {
                 ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `uuid`='" + uuid + "';");
                 if(rs != null && rs.next()) {
@@ -34,7 +34,7 @@ public class UUIDLibrary {
         return null;
     }
 
-    public static Boolean isRegistred(UUID uuid) {
+    public static Boolean isRegistered(UUID uuid) {
         ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         try {
             return rs != null && rs.next();
@@ -44,7 +44,7 @@ public class UUIDLibrary {
         return false;
     }
 
-    public static Boolean isRegistred(String name) {
+    public static Boolean isRegistered(String name) {
         ResultSet rs = MySQL.query("SELECT * FROM `userdata` WHERE `name`='" + name + "';");
         try {
             return rs != null && rs.next();
