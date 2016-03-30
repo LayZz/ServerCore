@@ -73,12 +73,12 @@ public class Guild {
         }
     }
 
-    public void addMoney(Double amount) {
+    public void addGold(Double amount) {
         gold += amount;
         MySQL.update("UPDATE `guilds` SET `gold`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
     }
 
-    public Boolean removeMoney(Double amount) {
+    public Boolean removeGold(Double amount) {
         if(gold - amount < 0) {
             gold -= amount;
             MySQL.update("UPDATE `guilds` SET `money`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
@@ -86,7 +86,7 @@ public class Guild {
         return false;
     }
 
-    public void setMoney(Double amount) {
+    public void setGold(Double amount) {
         gold = amount;
         MySQL.update("UPDATE `guilds` SET `money`='" + gold + "' WHERE `name`='" + this.name + "' OR `id`='" + this.id + "';");
     }
