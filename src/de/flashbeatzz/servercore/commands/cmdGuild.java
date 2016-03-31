@@ -21,43 +21,43 @@ public class cmdGuild implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmd, String lable, String[] args) {
         /**
-         * /guildsystem create name tag
-         * /guildsystem disband name
-         * /guildsystem info name
-         * /guildsystem invite name...
-         * /guildsystem kick name...
-         * /guildsystem help
-         * /guildsystem setowner name
-         * /guildsystem money add amount
-         * /guildsystem accept
-         * /guildsystem decline
+         * /guild create name tag
+         * /guild disband name
+         * /guild info name
+         * /guild invite name...
+         * /guild kick name...
+         * /guild help
+         * /guild setowner name
+         * /guild money add amount
+         * /guild accept
+         * /guild decline
          */
         if(cs instanceof Player) {
             Player p = (Player) cs;
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("help")) {
                     p.sendMessage("§8§l[]======>> §6§lGuild - HELP §8§l<<======[]\n" +
-                            "§d/guildsystem help\n" +
+                            "§d/guild help\n" +
                             "   §fDisplays the help-page\n" +
-                            "§d/guildsystem create <name>\n" +
-                            "   §fCreates a new guildsystem with specific tag\n" +
-                            "§d/guildsystem disband\n" +
-                            "   §fDisbands your current guildsystem §4(Leader only)\n" +
-                            "§d/guildsystem info\n" +
-                            "   §fShows info about your own guildsystem\n" +
-                            "§d/guildsystem info <name>\n" +
-                            "   §fShows info about specific guildsystem\n" +
-                            "§d/guildsystem invite <name>\n" +
+                            "§d/guild create <name>\n" +
+                            "   §fCreates a new guild with specific tag\n" +
+                            "§d/guild disband\n" +
+                            "   §fDisbands your current guild §4(Leader only)\n" +
+                            "§d/guild info\n" +
+                            "   §fShows info about your own guild\n" +
+                            "§d/guild info <name>\n" +
+                            "   §fShows info about specific guild\n" +
+                            "§d/guild invite <name>\n" +
                             "   §fSends invitation to a player §4(Leader only)\n" +
-                            "§d/guildsystem kick <name>\n" +
-                            "   §fKicks a player out of your guildsystem §4(Leader only)\n" +
-                            "§d/guildsystem setleader <name>\n" +
-                            "   §fSets a new owner of your guildsystem §4(Leader only)\n" +
-                            "§d/guildsystem money add <amount>\n" +
-                            "   §fAdds money to your guildsystem\n" +
-                            "§d/guildsystem accept\n" +
+                            "§d/guild kick <name>\n" +
+                            "   §fKicks a player out of your guild §4(Leader only)\n" +
+                            "§d/guild setleader <name>\n" +
+                            "   §fSets a new owner of your guild §4(Leader only)\n" +
+                            "§d/guild money add <amount>\n" +
+                            "   §fAdds money to your guild\n" +
+                            "§d/guild accept\n" +
                             "   §fAccept an invitation\n" +
-                            "§d/guildsystem decline\n" +
+                            "§d/guild decline\n" +
                             "   §fDecline an invitation\n" +
                             "§8§l[]======>> §6§lGuild - HELP §8§l<<======[]");
                     return true;
@@ -66,11 +66,11 @@ public class cmdGuild implements CommandExecutor {
                         Guild g = InviteRunnable.pendingInvites.get(p.getUniqueId());
                         InviteRunnable.pendingInvites.remove(p.getUniqueId());
                         if(g.addMember(p.getUniqueId())) {
-                            g.broadcast("§7" + p.getName() + " joined your guildsystem.");
-                            p.sendMessage("§aYou joined guildsystem \"" + g.getName() + " - " + g.getTag() + "\n.");
+                            g.broadcast("§7" + p.getName() + " joined your guild.");
+                            p.sendMessage("§aYou joined guild \"" + g.getName() + " - " + g.getTag() + "\n.");
                             return true;
                         }
-                        p.sendMessage("§cYou are already in a guildsystem. Leave that first if you want to join another.");
+                        p.sendMessage("§cYou are already in a guild. Leave that first if you want to join another.");
                         return true;
                     }
                     p.sendMessage("§7You have no pending invitations.");
@@ -87,15 +87,15 @@ public class cmdGuild implements CommandExecutor {
                     Guild g = GuildSystem.getGuild(p.getUniqueId());
                     if(g != null) {
                         if(g.getFounder().equals(p.getUniqueId())) {
-                            p.sendMessage("§bDo you really want to disband your guildsystem?\n" +
-                                    new ComponentBuilder("YES").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guildsystem yes")).append("NO").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guildsystem no")));
+                            p.sendMessage("§bDo you really want to disband your guild?\n" +
+                                    new ComponentBuilder("YES").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild yes")).append("NO").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild no")));
                             list.put(p.getUniqueId(), g);
                             return true;
                         }
-                        p.sendMessage("§cYou are not the leader of your guildsystem.");
+                        p.sendMessage("§cYou are not the leader of your guild.");
                         return true;
                     }
-                    p.sendMessage("§cYou are not in a guildsystem.");
+                    p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if(args[0].equalsIgnoreCase("info")) {
                     Guild g = GuildSystem.getGuild(p.getUniqueId());
@@ -114,11 +114,11 @@ public class cmdGuild implements CommandExecutor {
                                 "§8§l[]======>> §6§l\" + g.getName() + \" - \" + g.getTag() + \" §8§l<<======[]");
                         return true;
                     }
-                    p.sendMessage("§cYou are not in a guildsystem.");
+                    p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if(args[0].equalsIgnoreCase("yes")) {
                     if(list.containsKey(p.getUniqueId())) {
-                        p.sendMessage("§aYou disbanned your guildsystem.");
+                        p.sendMessage("§aYou disbanned your guild.");
                         list.get(p.getUniqueId()).disband();
                         return true;
                     }
@@ -134,19 +134,19 @@ public class cmdGuild implements CommandExecutor {
                     if(g != null) {
                         if(g.getFounder().equals(p.getUniqueId())) {
                             if(!g.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
-                                Bukkit.getPlayer(args[1]).sendMessage("§7You got invited in the guildsystem.\n" +
-                                        new ComponentBuilder("ACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guildsystem accept")).append("DECLINE").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guildsystem decline")));
+                                Bukkit.getPlayer(args[1]).sendMessage("§7You got invited in the guild.\n" +
+                                        new ComponentBuilder("ACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild accept")).append("DECLINE").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild decline")));
                                 p.sendMessage("§7You invited the player.");
                                 new InviteRunnable(UUIDLibrary.getUUID(args[1]), g);
                                 return true;
                             }
-                            p.sendMessage("§cThis player is already in your guildsystem.");
+                            p.sendMessage("§cThis player is already in your guild.");
                             return true;
                         }
-                        p.sendMessage("§cYou are not the leader of your guildsystem.");
+                        p.sendMessage("§cYou are not the leader of your guild.");
                         return true;
                     }
-                    p.sendMessage("§cYou are not in a guildsystem.");
+                    p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if (args[0].equalsIgnoreCase("kick")) {
                     Guild g = GuildSystem.getGuild(p.getUniqueId());
@@ -157,13 +157,13 @@ public class cmdGuild implements CommandExecutor {
                                 p.sendMessage("§7You removed the player.");
                                 return true;
                             }
-                            p.sendMessage("§cThis player is not in your guildsystem.");
+                            p.sendMessage("§cThis player is not in your guild.");
                             return true;
                         }
-                        p.sendMessage("§cYou are not the leader of your guildsystem.");
+                        p.sendMessage("§cYou are not the leader of your guild.");
                         return true;
                     }
-                    p.sendMessage("§cYou are not in a guildsystem.");
+                    p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if (args[0].equalsIgnoreCase("setleader")) {
                     Guild g = GuildSystem.getGuild(p.getUniqueId());
@@ -171,17 +171,17 @@ public class cmdGuild implements CommandExecutor {
                         if(g.getFounder().equals(p.getUniqueId())) {
                             if(g.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
                                 g.setFounder(UUIDLibrary.getUUID(args[1]));
-                                Bukkit.getPlayer(g.getFounder()).sendMessage("§aYou are now the leader of your guildsystem.");
-                                p.sendMessage("§7You are not longer the leader of your guildsystem.");
+                                Bukkit.getPlayer(g.getFounder()).sendMessage("§aYou are now the leader of your guild.");
+                                p.sendMessage("§7You are not longer the leader of your guild.");
                                 return true;
                             }
-                            p.sendMessage("§cThis player is not in your guildsystem.");
+                            p.sendMessage("§cThis player is not in your guild.");
                             return true;
                         }
-                        p.sendMessage("§cYou are not the leader of your guildsystem.");
+                        p.sendMessage("§cYou are not the leader of your guild.");
                         return true;
                     }
-                    p.sendMessage("§cYou are not in a guildsystem.");
+                    p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if(args[0].equalsIgnoreCase("info")) {
                     Guild g = GuildSystem.getGuild(args[1]);
@@ -200,14 +200,18 @@ public class cmdGuild implements CommandExecutor {
                                 "§8§l[]======>> §6§l" + g.getName() + " - " + g.getTag() + " §8§l<<======[]");
                         return true;
                     }
-                    p.sendMessage("§cThis guildsystem doesnt exist.");
+                    p.sendMessage("§cThis guild doesnt exist.");
                     return true;
                 } else if (args[0].equalsIgnoreCase("create")) {
                     if (GuildSystem.newGuild(args[1], p.getUniqueId())) {
-                        p.sendMessage("§aYou created a new guildsystem successfully.");
+                        if(GuildSystem.getGuild(p.getUniqueId()) == null) {
+                            p.sendMessage("§aYou created a new guild successfully.");
+                            return true;
+                        }
+                        p.sendMessage("§cYou are already in a guild.");
                         return true;
                     }
-                    p.sendMessage("§cThe guildsystem already exists.");
+                    p.sendMessage("§cThe guild already exists.");
                     return true;
                 }
             } else if (args.length == 3) {
@@ -220,12 +224,12 @@ public class cmdGuild implements CommandExecutor {
                             p.sendMessage("§7You successfully payed the amount.");
                             return true;
                         }
-                        p.sendMessage("§cYou are not in a guildsystem.");
+                        p.sendMessage("§cYou are not in a guild.");
                         return true;
                     }
                 }
             } else {
-                p.sendMessage("§cUsage: /guildsystem help");
+                p.sendMessage("§cUsage: /guild help");
                 return true;
             }
         }

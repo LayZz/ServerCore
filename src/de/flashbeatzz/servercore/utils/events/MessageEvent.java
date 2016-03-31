@@ -7,6 +7,7 @@ public class MessageEvent extends Event {
 
     private String header;
     private String message;
+    private static final HandlerList handlers = new HandlerList();
 
     public MessageEvent(String header, String message) {
         this.header = header;
@@ -21,9 +22,11 @@ public class MessageEvent extends Event {
         return message;
     }
 
-    @Override
     public HandlerList getHandlers() {
-        return null;
+        return handlers;
     }
 
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 }

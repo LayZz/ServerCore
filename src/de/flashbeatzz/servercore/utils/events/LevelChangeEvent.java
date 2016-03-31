@@ -12,6 +12,7 @@ public class LevelChangeEvent extends Event {
     private Level newLevel;
     private Level oldLevel;
     private UUID uuid;
+    private static final HandlerList handlers = new HandlerList();
 
     public LevelChangeEvent(UUID uuid, Integer old, Integer newL) {
         this.uuid = uuid;
@@ -35,8 +36,11 @@ public class LevelChangeEvent extends Event {
         return newLevel.toInt() > oldLevel.toInt();
     }
 
-    @Override
     public HandlerList getHandlers() {
-        return null;
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

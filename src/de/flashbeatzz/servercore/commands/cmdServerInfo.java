@@ -19,20 +19,22 @@ public class cmdServerInfo implements CommandExecutor {
             long freeRAM = runtime.freeMemory();
             long usedRAM = maxRAM - freeRAM;*/
             MemoryUsage heapMemoryUsage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
+            //long committedRAM = heapMemoryUsage.getCommitted();
             long maxRAM = heapMemoryUsage.getMax();
-            long freeRAM = heapMemoryUsage.getUsed();
-            long usedRAM = maxRAM - freeRAM;
+            long usedRAM = heapMemoryUsage.getUsed();
+            long freeRAM = maxRAM - usedRAM;
             String os = System.getProperty("os.name");
             String os_version = System.getProperty("os.version");
-            Integer gb = 1024*1024*1024;
-            cs.sendMessage("§8§l[]======>> §6§lSERVER - INFO §8§l<<======[]\n" +
+            Integer mb = 1024*1024;
+            cs.sendMessage("\n§8§l[]======>> §6§lSERVER - INFO §8§l<<======[]\n" +
                     "§dBetriebssystem:  §f" + os + "\n" +
                     "§dVersion:         §f" + os_version + "\n" +
                     "\n" +
-                    "§dMaximaler RAM:   §f" + maxRAM / gb + " GB\n" +
-                    "§dBenutzter RAM:   §f" + usedRAM / gb + " GB\n" +
-                    "§dFreier RAM:      §f" + freeRAM / gb + " GB\n" +
-                    "§8§l[]======>> §6§lSERVER - INFO §8§l<<======[]");
+                    //"§dZugeteilter RAM: §f" + committedRAM / mb + " MB\n" +
+                    "§dMaximaler RAM:   §f" + maxRAM / mb + " MB\n" +
+                    "§dBenutzter RAM:   §f" + usedRAM / mb + " MB\n" +
+                    "§dFreier RAM:      §f" + freeRAM / mb + " MB\n" +
+                    "§8§l[]======>> §6§lSERVER - INFO §8§l<<======[]\n");
             return true;
         }
         cs.sendMessage("§cFalsche Verwendung: /serverinfo");

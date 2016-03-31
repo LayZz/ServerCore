@@ -71,7 +71,7 @@ public class ServerCore extends JavaPlugin {
         Data.console.info("Registering commands...");
         getCommand("exp").setExecutor(new cmdExp());
         getCommand("serverinfo").setExecutor(new cmdServerInfo());
-        getCommand("guildsystem").setExecutor(new cmdGuild());
+        getCommand("guild").setExecutor(new cmdGuild());
         Data.console.info("Commands registered!");
 
         Data.console.info("Registering events...");

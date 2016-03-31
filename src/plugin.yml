@@ -13,6 +13,6 @@ commands:
     description: Serverinfo-Command
     usage: /serverinfo
     aliases: si
-  guilde:
-    description: Guilde-Command
-    usage: /guildsystem help
+  guild:
+    description: Guild-Command
+    usage: /guild help
