@@ -128,6 +128,8 @@ public class cmdGuild implements CommandExecutor {
                         return true;
                     }
                 }
+                p.sendMessage("§cUsage: /guild help");
+                return true;
             } else if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("invite")) {
                     Guild g = GuildSystem.getGuild(p.getUniqueId());
@@ -214,6 +216,8 @@ public class cmdGuild implements CommandExecutor {
                     p.sendMessage("§cThe guild already exists.");
                     return true;
                 }
+                p.sendMessage("§cUsage: /guild help");
+                return true;
             } else if (args.length == 3) {
                 if (args[0].equalsIgnoreCase("money")) {
                     if (args[1].equalsIgnoreCase("add")) {
@@ -227,7 +231,11 @@ public class cmdGuild implements CommandExecutor {
                         p.sendMessage("§cYou are not in a guild.");
                         return true;
                     }
+                    p.sendMessage("§cUsage: /guild help");
+                    return true;
                 }
+                p.sendMessage("§cUsage: /guild help");
+                return true;
             } else {
                 p.sendMessage("§cUsage: /guild help");
                 return true;
