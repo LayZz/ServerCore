@@ -17,6 +17,16 @@ public class UserData {
             return (userData.isValid ? userData : null);
         }
     }
+    public static UserData getUserData(String name) {
+        for(UserData userData : userDatas.values()) {
+            if(userData.getName().equalsIgnoreCase(name)) {
+                return userData;
+            }
+        }
+
+        UserData userData = new UserData(name, null);
+        return (userData.isValid ? userData : null);
+    }
 
     public static void removeUserData(UUID uuid) {
         userDatas.remove(uuid);
@@ -52,17 +62,28 @@ public class UserData {
     }
 
     public void load() throws SQLException {
-        ResultSet resultSet = MySQL.query("SELECT * FROM `userdata` WHERE `uuid` = '" + uuid.toString() + "'");
-        if (resultSet != null && resultSet.next()) {
-            if (name.equals("")) {
-                name = resultSet.getString("name");
+        if(uuid != null) {
+            ResultSet resultSet = MySQL.query("SELECT * FROM `userdata` WHERE `uuid` = '" + uuid.toString() + "'");
+            if (resultSet != null && resultSet.next()) {
+                if (name.equals("")) {
+                    name = resultSet.getString("name");
+                }
+                guild_id = resultSet.getInt("guild_id");
+                level = resultSet.getInt("level");
+                exp = resultSet.getInt("exp");
+                money = resultSet.getInt("money");
+            } else {
+                insert();
             }
-            guild_id = resultSet.getInt("guild_id");
-            level = resultSet.getInt("level");
-            exp = resultSet.getInt("exp");
-            money = resultSet.getInt("money");
         } else {
-            insert();
+            ResultSet resultSet = MySQL.query("SELECT * FROM `userdata` WHERE `name` = '" + name + "'");
+            if (resultSet != null && resultSet.next()) {
+                uuid = UUID.fromString(resultSet.getString("uuid"));
+                guild_id = resultSet.getInt("guild_id");
+                level = resultSet.getInt("level");
+                exp = resultSet.getInt("exp");
+                money = resultSet.getInt("money");
+            }
         }
     }
 
@@ -70,43 +91,52 @@ public class UserData {
         MySQL.execute("INSERT INTO `userdata` (`uuid`, `name`, `money`, `guild_id`, `level`, `exp`) VALUES ('" + uuid.toString() + "', '" + name + "', '" + money + "', '-1', '" + level + "', '" + exp + "')");
     }
 
-    public void save() {
-        MySQL.update("UPDATE `userdata` SET `name` = '" + name + "' AND `money` = '" + money + "' AND `guild_id` = '-1' AND `level` = '" + level + "' AND `exp` = '" + exp + "'");
+    public boolean save() {
+        return MySQL.update("UPDATE `userdata` SET `name` = '" + name + "' AND `money` = '" + money + "' AND `guild_id` = '-1' AND `level` = '" + level + "' AND `exp` = '" + exp + "'");
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
 
     public int getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public boolean setMoney(int money) {
         this.money = money;
-        save();
+        return save();
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public boolean setLevel(int level) {
         this.level = level;
-        save();
+        return save();
     }
 
     public int getExp() {
         return exp;
     }
 
-    public void setExp(int exp) {
+    public boolean setExp(int exp) {
         this.exp = exp;
-        save();
+        return save();
     }
 
     public int getGuildID() {
         return guild_id;
     }
 
-    public void setGuildID(int guild_id) {
+    public boolean setGuildID(int guild_id) {
         this.guild_id = guild_id;
+        return save();
     }
 }
