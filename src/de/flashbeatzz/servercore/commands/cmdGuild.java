@@ -34,6 +34,8 @@ public class cmdGuild implements CommandExecutor {
          */
         if(cs instanceof Player) {
             Player p = (Player) cs;
+            UUID pUUID = p.getUniqueId();
+            Guild pGuild = GuildSystem.getGuild(pUUID);
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("help")) {
                     p.sendMessage("§8§l[]======>> §6§lGuild - HELP §8§l<<======[]\n" +
@@ -62,10 +64,10 @@ public class cmdGuild implements CommandExecutor {
                             "§8§l[]======>> §6§lGuild - HELP §8§l<<======[]");
                     return true;
                 } else if (args[0].equalsIgnoreCase("accept")) {
-                    if (InviteRunnable.pendingInvites.containsKey(p.getUniqueId())) {
-                        Guild g = InviteRunnable.pendingInvites.get(p.getUniqueId());
-                        InviteRunnable.pendingInvites.remove(p.getUniqueId());
-                        if(g.addMember(p.getUniqueId())) {
+                    if (InviteRunnable.pendingInvites.containsKey(pUUID)) {
+                        Guild g = InviteRunnable.pendingInvites.get(pUUID);
+                        InviteRunnable.pendingInvites.remove(pUUID);
+                        if(g.addMember(pUUID)) {
                             g.broadcast("§7" + p.getName() + " joined your guild.");
                             p.sendMessage("§aYou joined guild \"" + g.getName() + " - " + g.getTag() + "\n.");
                             return true;
@@ -76,20 +78,19 @@ public class cmdGuild implements CommandExecutor {
                     p.sendMessage("§7You have no pending invitations.");
                     return true;
                 } else if (args[0].equalsIgnoreCase("decline")) {
-                    if (InviteRunnable.pendingInvites.containsKey(p.getUniqueId())) {
-                        InviteRunnable.pendingInvites.remove(p.getUniqueId());
+                    if (InviteRunnable.pendingInvites.containsKey(pUUID)) {
+                        InviteRunnable.pendingInvites.remove(pUUID);
                         p.sendMessage("§7You declined the invitation.");
                         return true;
                     }
                     p.sendMessage("§7You have no pending invitations.");
                     return true;
                 } else if (args[0].equalsIgnoreCase("disband")) {
-                    Guild g = GuildSystem.getGuild(p.getUniqueId());
-                    if(g != null) {
-                        if(g.getFounder().equals(p.getUniqueId())) {
+                    if(pGuild != null) {
+                        if(pGuild.getFounder().equals(pUUID)) {
                             p.sendMessage("§bDo you really want to disband your guild?\n" +
                                     new ComponentBuilder("YES").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild yes")).append("NO").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild no")));
-                            list.put(p.getUniqueId(), g);
+                            list.put(pUUID, pGuild);
                             return true;
                         }
                         p.sendMessage("§cYou are not the leader of your guild.");
@@ -98,18 +99,17 @@ public class cmdGuild implements CommandExecutor {
                     p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if(args[0].equalsIgnoreCase("info")) {
-                    Guild g = GuildSystem.getGuild(p.getUniqueId());
-                    if(g != null) {
+                    if(pGuild != null) {
                         String members = "";
-                        for(UUID uuid : g.getMembers()) {
+                        for(UUID uuid : pGuild.getMembers()) {
                             members += "  - " + UUIDLibrary.getName(uuid) + "\n";
                         }
-                        p.sendMessage("§8§l[]======>> §6§l" + g.getName() + " - " + g.getTag() + " §8§l<<======[]\n" +
-                                "§dID:      §f" + g.getId() +
-                                "§dName:    §f" + g.getName() +
-                                "§dTag:     §f" + g.getTag() +
-                                "§dFounder: §f" + UUIDLibrary.getName(g.getFounder()) +
-                                "§dMoney:   §f" + g.getGold() +
+                        p.sendMessage("§8§l[]======>> §6§l" + pGuild.getName() + " - " + pGuild.getTag() + " §8§l<<======[]\n" +
+                                "§dID:      §f" + pGuild.getId() +
+                                "§dName:    §f" + pGuild.getName() +
+                                "§dTag:     §f" + pGuild.getTag() +
+                                "§dFounder: §f" + UUIDLibrary.getName(pGuild.getFounder()) +
+                                "§dMoney:   §f" + pGuild.getGold() +
                                 "§dMembers: §f\n" + members + "" +
                                 "§8§l[]======>> §6§l\" + g.getName() + \" - \" + g.getTag() + \" §8§l<<======[]");
                         return true;
@@ -117,13 +117,13 @@ public class cmdGuild implements CommandExecutor {
                     p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if(args[0].equalsIgnoreCase("yes")) {
-                    if(list.containsKey(p.getUniqueId())) {
+                    if(list.containsKey(pUUID)) {
                         p.sendMessage("§aYou disbanned your guild.");
-                        list.get(p.getUniqueId()).disband();
+                        list.get(pUUID).disband();
                         return true;
                     }
                 } else if(args[0].equalsIgnoreCase("no")) {
-                    if(list.containsKey(p.getUniqueId())) {
+                    if(list.containsKey(pUUID)) {
                         p.sendMessage("§7You cancelled the disband.");
                         return true;
                     }
@@ -132,14 +132,13 @@ public class cmdGuild implements CommandExecutor {
                 return true;
             } else if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("invite")) {
-                    Guild g = GuildSystem.getGuild(p.getUniqueId());
-                    if(g != null) {
-                        if(g.getFounder().equals(p.getUniqueId())) {
-                            if(!g.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
+                    if(pGuild != null) {
+                        if(pGuild.getFounder().equals(pUUID)) {
+                            if(!pGuild.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
                                 Bukkit.getPlayer(args[1]).sendMessage("§7You got invited in the guild.\n" +
                                         new ComponentBuilder("ACCEPT").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild accept")).append("DECLINE").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/guild decline")));
                                 p.sendMessage("§7You invited the player.");
-                                new InviteRunnable(UUIDLibrary.getUUID(args[1]), g);
+                                new InviteRunnable(UUIDLibrary.getUUID(args[1]), pGuild);
                                 return true;
                             }
                             p.sendMessage("§cThis player is already in your guild.");
@@ -151,11 +150,10 @@ public class cmdGuild implements CommandExecutor {
                     p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if (args[0].equalsIgnoreCase("kick")) {
-                    Guild g = GuildSystem.getGuild(p.getUniqueId());
-                    if(g != null) {
-                        if(g.getFounder().equals(p.getUniqueId())) {
-                            if(g.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
-                                g.removeMember(UUIDLibrary.getUUID(args[1]));
+                    if(pGuild != null) {
+                        if(pGuild.getFounder().equals(pUUID)) {
+                            if(pGuild.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
+                                pGuild.removeMember(UUIDLibrary.getUUID(args[1]));
                                 p.sendMessage("§7You removed the player.");
                                 return true;
                             }
@@ -168,12 +166,11 @@ public class cmdGuild implements CommandExecutor {
                     p.sendMessage("§cYou are not in a guild.");
                     return true;
                 } else if (args[0].equalsIgnoreCase("setleader")) {
-                    Guild g = GuildSystem.getGuild(p.getUniqueId());
-                    if(g != null) {
-                        if(g.getFounder().equals(p.getUniqueId())) {
-                            if(g.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
-                                g.setFounder(UUIDLibrary.getUUID(args[1]));
-                                Bukkit.getPlayer(g.getFounder()).sendMessage("§aYou are now the leader of your guild.");
+                    if(pGuild != null) {
+                        if(pGuild.getFounder().equals(pUUID)) {
+                            if(pGuild.getMembers().contains(UUIDLibrary.getUUID(args[1]))) {
+                                pGuild.setFounder(UUIDLibrary.getUUID(args[1]));
+                                Bukkit.getPlayer(pGuild.getFounder()).sendMessage("§aYou are now the leader of your guild.");
                                 p.sendMessage("§7You are not longer the leader of your guild.");
                                 return true;
                             }
@@ -202,11 +199,11 @@ public class cmdGuild implements CommandExecutor {
                                 "§8§l[]======>> §6§l" + g.getName() + " - " + g.getTag() + " §8§l<<======[]");
                         return true;
                     }
-                    p.sendMessage("§cThis guild doesnt exist.");
+                    p.sendMessage("§cThis guild does not exist.");
                     return true;
                 } else if (args[0].equalsIgnoreCase("create")) {
-                    if (GuildSystem.newGuild(args[1], p.getUniqueId())) {
-                        if(GuildSystem.getGuild(p.getUniqueId()) == null) {
+                    if (GuildSystem.newGuild(args[1], pUUID)) {
+                        if(GuildSystem.getGuild(pUUID) == null) {
                             p.sendMessage("§aYou created a new guild successfully.");
                             return true;
                         }
@@ -221,10 +218,9 @@ public class cmdGuild implements CommandExecutor {
             } else if (args.length == 3) {
                 if (args[0].equalsIgnoreCase("money")) {
                     if (args[1].equalsIgnoreCase("add")) {
-                        Guild g = GuildSystem.getGuild(p.getUniqueId());
-                        if(g != null) {
+                        if(pGuild != null) {
                             //MONEY API NEEDED
-                            g.addGold(Double.valueOf(args[2]));
+                            pGuild.addGold(Double.valueOf(args[2]));
                             p.sendMessage("§7You successfully payed the amount.");
                             return true;
                         }

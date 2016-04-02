@@ -32,22 +32,22 @@ public class GuildSystem implements Listener {
     }
 
     public static Guild getGuild(Integer id) {
-        if(exist(id)) {
-            for(Guild g : guilds.values()) {
-                if(g.getId().equals(id)) {
-                    return g;
-                }
+        for (Guild g : guilds.values()) {
+            if (g.getId().equals(id)) {
+                return g;
             }
+        }
+        if (exist(id)) {
             return new Guild(id);
         }
         return null;
     }
 
     public static Guild getGuild(String name) {
-        if(exist(name)) {
-            if(guilds.containsKey(name)) {
-                return guilds.get(name);
-            }
+        if (guilds.containsKey(name)) {
+            return guilds.get(name);
+        }
+        if (exist(name)) {
             return new Guild(name);
         }
         return null;
@@ -77,8 +77,9 @@ public class GuildSystem implements Listener {
         ResultSet rs = MySQL.query("SELECT `guild_id` FROM `userdata` WHERE `uuid`='" + uuid.toString() + "';");
         try {
             if(rs != null && rs.next()) {
-                if(Objects.equals(rs.getInt("guild_id"), -1)) return new Guild(rs.getInt("guild_id"));
+                if(!Objects.equals(rs.getInt("guild_id"), -1)) return new Guild(rs.getInt("guild_id"));
             }
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
